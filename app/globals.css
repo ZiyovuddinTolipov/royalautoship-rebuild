@@ -1,26 +1,119 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #f6f1e7;
+  --paper-2: #ede5d3;
+  --ink: #0f1422;
+  --ink-2: #151c30;
+  --ink-3: #1e2740;
+  --gold: #c2a04c;
+  --gold-bright: #e6cd86;
+  --muted: #59607a;
+  --muted-dark: #97a0ba;
+  --line: #ddd3bd;
+  --line-dark: rgba(230, 205, 134, 0.16);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-gold: var(--gold);
+  --color-gold-bright: var(--gold-bright);
+  --color-muted: var(--muted);
+  --color-muted-dark: var(--muted-dark);
+  --color-line: var(--line);
+  --color-line-dark: var(--line-dark);
+  --font-sans: var(--font-archivo);
+  --font-display: var(--font-fraunces);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-archivo), sans-serif;
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--ink);
+}
+
+/* Grain texture for dark sections */
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Animated route line in hero */
+.route-dash {
+  stroke-dasharray: 10 12;
+  animation: route-flow 2.4s linear infinite;
+}
+@keyframes route-flow {
+  to {
+    stroke-dashoffset: -88;
+  }
+}
+
+/* Page-load stagger */
+.rise {
+  opacity: 0;
+  transform: translateY(22px);
+  animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Scroll reveal (toggled by <Reveal/>) */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* FAQ accordion */
+details.faq summary {
+  list-style: none;
+  cursor: pointer;
+}
+details.faq summary::-webkit-details-marker {
+  display: none;
+}
+details.faq summary .faq-icon {
+  transition: transform 0.3s ease;
+}
+details.faq[open] summary .faq-icon {
+  transform: rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .route-dash {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .reveal {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
 }
